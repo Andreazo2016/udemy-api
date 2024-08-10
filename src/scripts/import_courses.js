@@ -1,5 +1,6 @@
+require('dotenv/config')
 const udemy = require('../config/udemy_credentials')
-const db = require('../config/db')
+const { db } = require('../config/db')
 
 function mapFieldsToInsertFreeCourses(courses = []) {
   return courses.map(course => {
@@ -56,7 +57,7 @@ async function start() {
   let page = 1
   let hasNextPage = false 
   let { next, results } = await getFreeCourses(page)
-  const fields = mapFieldsToInsertPaidCourses(results)
+  const fields = mapFieldsToInsertFreeCourses(results)
   await db('udemy_courses').insert(fields)
   hasNextPage = !!next
   while(hasNextPage) {
@@ -64,7 +65,7 @@ async function start() {
     page = page + 1
     console.log({ page })
     let { next: nextPage, results } = await getFreeCourses(page)
-    const fields = mapFieldsToInsertPaidCourses(results)
+    const fields = mapFieldsToInsertFreeCourses(results)
     await db('udemy_courses').insert(fields)
     console.log(`Inserido: ${fields.length}`)
     hasNextPage = !!nextPage
