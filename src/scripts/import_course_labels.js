@@ -22,11 +22,7 @@ async function getLabels() {
     await db('udemy_course_labels').insert(fields)
     console.log(`Inseridos ${fields.length}`)
   }
-}
-
-
-async function start() {
- 
   process.exit(0)
 }
+
 getLabels()
