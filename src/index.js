@@ -1,6 +1,7 @@
 require('dotenv/config')
 const Fastify = require('fastify')
 const registerRoutes = require('./routes/index')
+require('./routines/index')
 
 const fastify = Fastify({
   logger: true

@@ -1,7 +1,9 @@
 const HttpStatus = require('http-status')
 const UdemyService = require('../services/udemy')
-const { db } = require('../config/db')
 const formatCourse = require('../helpers/format_course')
+const { db } = require('../config/db')
+
+
 class CourseController {
 
   async create(req, res) {

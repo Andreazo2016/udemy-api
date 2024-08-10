@@ -1,3 +1,4 @@
+require('dotenv').config()
 const knex = require('knex')
 const dbConfig = {
   client: process.env.DB_CLIENT,
