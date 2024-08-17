@@ -2,6 +2,7 @@ require('dotenv/config')
 const Fastify = require('fastify')
 const registerRoutes = require('./routes/index')
 require('./routines/index')
+require('./services/elasticsearch')
 
 const fastify = Fastify({
   logger: true
