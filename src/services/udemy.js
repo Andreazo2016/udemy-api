@@ -1,4 +1,5 @@
 const udemy = require('../config/udemy_credentials')
+const Logger = require('../helpers/logger')
 
 class UdemyService {
 
@@ -17,7 +18,13 @@ class UdemyService {
       const data = await response.json()
       return data
     } catch (ex) {
-      console.log(ex)
+      Logger.error({
+        error: ex,
+        type_event:'FetchCourseServiceUdemy',
+        body: {
+          course_id: id
+        }
+      })
       throw ex
     }
   }
@@ -37,7 +44,10 @@ class UdemyService {
       const data = await response.json()
       return data
     } catch (ex) {
-      console.log(ex)
+      Logger.error({
+        error: ex,
+        type_event:'FetchAllCourseServiceUdemy',
+      })
       throw ex
     }
   }

@@ -4,5 +4,5 @@ POST http://localhost:3001/api/v1/courses   HTTP/1.1
 content-type: application/json
 
 {
-    "course_id": 2572282
+    "course_id": 5475842
 }
