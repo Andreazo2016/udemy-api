@@ -1,16 +1,17 @@
 const cron = require('node-cron')
 const { db } = require('../config/db')
-const UdemyService = require('../services/udemy')
-const formatCourse = require('../helpers/format_course')
+const QueueHelper = require('../helpers/queue')
 
 const PATTERN = '* 1 * * *' //Running a job at 01:00 at America/Sao_Paulo timezone
 let isJobRunning = false
+const queueHelper = new QueueHelper('price_collecting_queue')
 
 async function collectingPrice() {
   if (isJobRunning) {
     console.log('there is job running yet')
     return
   }
+  const priceCollectingQueue = await queueHelper.createOrGetQueue()
   const limit = 10
   const [{ total }] =  await db('udemy_courses').count('id', { as: 'total' }).where({
     type: 'paid'
@@ -23,18 +24,9 @@ async function collectingPrice() {
     .where({ type: 'paid' })
     .limit(limit)
     .offset(page * limit)
-    let toInsert = []
     for (const course of courses) {
-      const response = await UdemyService.getCourse(course.course_id)
-      const formattedCourse = formatCourse(response)
-      const data = {
-        date: new Date(),
-        price: formattedCourse.price,
-        udemy_course_id: course.id
-      }
-      toInsert.push(data)
+      priceCollectingQueue.publish({ course_id: course.course_id })
     }
-    await db('udemy_course_prices').insert(toInsert)
   }
   isJobRunning = false
 }
